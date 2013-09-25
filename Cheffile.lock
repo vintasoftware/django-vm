@@ -1,0 +1,40 @@
+SITE
+  remote: http://community.opscode.com/api/v1
+  specs:
+    openssl (1.1.0)
+
+GIT
+  remote: https://github.com/opscode-cookbooks/apt.git
+  ref: master
+  sha: 3f312feda92371c6ac0f7e0c0acda95740e37ca8
+  specs:
+    apt (2.1.1)
+
+GIT
+  remote: https://github.com/opscode-cookbooks/build-essential.git
+  ref: master
+  sha: 7f4d351036f10e7b641e1df137390491d6111669
+  specs:
+    build-essential (1.4.2)
+
+GIT
+  remote: https://github.com/opscode-cookbooks/postgresql.git
+  ref: master
+  sha: 665b3d0f4620c28108ffec8a89b1f9af300a977d
+  specs:
+    postgresql (3.0.5)
+      apt (>= 0.0.0)
+      build-essential (>= 0.0.0)
+      openssl (>= 0.0.0)
+
+PATH
+  remote: django-native-deps
+  specs:
+    django-native-deps (0.1.0)
+
+DEPENDENCIES
+  apt (>= 0)
+  build-essential (>= 0)
+  django-native-deps (>= 0)
+  postgresql (>= 0)
+

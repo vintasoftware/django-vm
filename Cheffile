@@ -3,11 +3,14 @@
 
 site 'http://community.opscode.com/api/v1'
 
-cookbook 'build-essential',
-    :git => 'https://github.com/opscode-cookbooks/build-essential.git'
-
 cookbook 'apt',
     :git => 'https://github.com/opscode-cookbooks/apt.git'
 
+cookbook 'build-essential',
+    :git => 'https://github.com/opscode-cookbooks/build-essential.git'
+
+cookbook 'django-native-deps',
+    :path => 'django-native-deps'
+
 cookbook 'postgresql',
-    :git => 'https://github.com/fjsj/cookbook-postgresql-9.2.git'
+    :git => 'https://github.com/opscode-cookbooks/postgresql.git'
