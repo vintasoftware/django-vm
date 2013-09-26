@@ -1,5 +1,3 @@
-package 'python-dev'
-
 # PIL libraries (try: apt-rdepends --build-depends --follow=DEPENDS python-imaging)
 package 'libfreetype6-dev'
 package 'libjpeg8-dev'

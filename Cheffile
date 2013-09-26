@@ -9,6 +9,9 @@ cookbook 'apt',
 cookbook 'build-essential',
     :git => 'https://github.com/opscode-cookbooks/build-essential.git'
 
+cookbook 'python',
+    :git => 'https://github.com/opscode-cookbooks/python.git'
+
 cookbook 'django-native-deps',
     :path => 'django-native-deps'
 
