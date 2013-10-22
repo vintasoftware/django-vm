@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 #^syntax detection
@@ -18,7 +19,6 @@ Vagrant::Config.run do |config|
     chef.add_recipe 'python'
     chef.add_recipe 'django-native-deps'
     chef.add_recipe 'postgresql::server'
-    chef.add_recipe 'gunicorn'
     chef.add_recipe 'nginx'
     
     chef.json = {
