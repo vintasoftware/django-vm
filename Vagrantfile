@@ -5,8 +5,8 @@
 Vagrant::Config.run do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "precise64"
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  config.vm.box = "debian7"
+  config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/debian-70rc1-x64-vbox4210.box"
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
@@ -15,9 +15,11 @@ Vagrant::Config.run do |config|
   config.vm.provision :chef_solo do |chef|
     chef.add_recipe 'apt'
     chef.add_recipe 'build-essential'
+    chef.add_recipe 'python'
     chef.add_recipe 'django-native-deps'
-    chef.add_recipe 'postgresql::apt_pgdg_postgresql'
     chef.add_recipe 'postgresql::server'
+    chef.add_recipe 'gunicorn'
+    chef.add_recipe 'nginx'
     
     chef.json = {
       postgresql: {

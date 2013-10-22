@@ -17,3 +17,9 @@ cookbook 'django-native-deps',
 
 cookbook 'postgresql',
     :git => 'https://github.com/opscode-cookbooks/postgresql.git'
+
+cookbook 'gunicorn',
+    :git => 'https://github.com/opscode-cookbooks/gunicorn.git'
+
+cookbook 'nginx',
+    :git => 'https://github.com/opscode-cookbooks/nginx.git'
