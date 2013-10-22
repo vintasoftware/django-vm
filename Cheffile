@@ -20,3 +20,6 @@ cookbook 'postgresql',
 
 cookbook 'nginx',
     :git => 'https://github.com/opscode-cookbooks/nginx.git'
+
+cookbook 'default',
+    :path => 'default'

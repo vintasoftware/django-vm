@@ -20,6 +20,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe 'django-native-deps'
     chef.add_recipe 'postgresql::server'
     chef.add_recipe 'nginx'
+    chef.add_recipe 'default'
     
     chef.json = {
       postgresql: {
@@ -51,6 +52,9 @@ Vagrant::Config.run do |config|
             {type: 'host', db: 'all', user: 'all', addr: '::1/128', method: 'trust'}
           ],
           version: "9.2"
+      },
+      app: {
+        name: 'django-example'
       }
     }  
   end
