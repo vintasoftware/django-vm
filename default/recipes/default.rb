@@ -2,6 +2,7 @@ nginx_site 'default' do
   enable false
 end
 
+directory "/apps"
 directory "/apps/#{node.app.name}"
 directory "/apps/#{node.app.name}/logs"
 
