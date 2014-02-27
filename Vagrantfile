@@ -21,9 +21,9 @@ Vagrant.configure("2") do |config|
     chef.add_recipe 'build-essential'
     chef.add_recipe 'git'
     chef.add_recipe 'python'
-    chef.add_recipe 'django-native-deps'
     chef.add_recipe 'postgresql::server'
     chef.add_recipe 'nginx'
+    chef.add_recipe 'django-native-deps'
     chef.add_recipe 'default'
     
     chef.json = {
@@ -58,10 +58,7 @@ Vagrant.configure("2") do |config|
           version: "9.2"
       },
       app: {
-        name: 'example',
-        db: {
-          name: 'django-example'
-        }
+        name: 'django-example'
       }
     }  
   end

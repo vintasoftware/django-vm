@@ -37,6 +37,11 @@ end
 nginx_site "#{node.app.name}"
 
 execute "create database" do
-    command "createdb -U postgres -T template0 -O postgres #{node.app.db.name}"
-    not_if "psql -U postgres --list | grep #{node.app.db.name}"
+    command "createdb -U postgres -T template0 -O postgres #{node.app.name}"
+    not_if "psql -U postgres --list | grep #{node.app.name}"
+end
+
+execute "create plpythonu on database" do
+  command "createlang -U postgres plpythonu #{node.app.name}"
+  not_if "createlang -U postgres -l #{node.app.name} | grep plpythonu"
 end

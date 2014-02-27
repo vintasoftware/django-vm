@@ -5,20 +5,20 @@ from contextlib import contextmanager
 from fabric.operations import put
 from fabric.api import env, local, sudo, run, cd, prefix, task, settings
 
-PROJECT_NAME = 'django-example'
+APP_NAME = 'django-example'
 
 src_dir = os.path.join(os.path.dirname(env.real_fabfile), 'src')
-env.lcwd = os.path.join(src_dir, PROJECT_NAME)
+env.lcwd = os.path.join(src_dir, APP_NAME)
 
 env.id_rsa_pub_file = '~/.ssh/id_rsa.pub'
 
-env.git_bare_dir = '/apps/example.git'
-env.root_dir = '/apps/example'
-env.django_dir = '%s/example' % env.root_dir
+env.git_bare_dir = '/apps/%s.git' % APP_NAME
+env.root_dir = '/apps/%s' % APP_NAME
+env.django_dir = '%s/%s' % (env.root_dir, APP_NAME)
 env.media_dir = '%s/media' % env.django_dir
 env.static_dir = '%s/static' % env.django_dir
-env.requirements_file = '%s/requirements/production.txt' % env.root_dir
-env.settings_file = 'core.settings.production'
+env.requirements_file = '%s/requirements/staging.txt' % env.root_dir
+env.settings_file = 'core.settings.staging'
 env.virtualenv = '%s/env' % env.root_dir
 env.activate = 'source %s/bin/activate ' % env.virtualenv
 
@@ -90,7 +90,20 @@ def setup():
         with _virtualenv():
             _manage_py('syncdb --noinput')
             _manage_py('migrate')
+            _manage_py('collectstatic --noinput')
             _manage_py('createsuperuser')
+
+
+@task
+def migrate():
+    _set_env_for_user()
+
+    with cd(env.django_dir):
+        with _virtualenv():
+            _manage_py('syncdb --noinput')
+            _manage_py('migrate')
+            _manage_py('collectstatic --noinput')
+
 
 @task
 def authorize_key():

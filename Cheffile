@@ -14,14 +14,14 @@ cookbook 'git'
 cookbook 'python',
     :git => 'https://github.com/opscode-cookbooks/python.git'
 
-cookbook 'django-native-deps',
-    :path => 'django-native-deps'
-
 cookbook 'postgresql',
     :git => 'https://github.com/opscode-cookbooks/postgresql.git'
 
 cookbook 'nginx',
     :git => 'https://github.com/opscode-cookbooks/nginx.git'
+
+cookbook 'django-native-deps',
+    :path => 'django-native-deps'
 
 cookbook 'default',
     :path => 'default'
