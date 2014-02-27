@@ -1,0 +1,3 @@
+[submodule "src/django-example"]
+	path = src/django-example
+	url = https://github.com/fjsj/django-example.git
