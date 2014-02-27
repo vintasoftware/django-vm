@@ -3,19 +3,23 @@
 # vi: set ft=ruby :
 #^syntax detection
 
-Vagrant::Config.run do |config|
+Vagrant.configure("2") do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "debian7"
   config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/debian-70rc1-x64-vbox4210.box"
 
-  # Forward a port from the guest to the host, which allows for outside
-  # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port 80, 8080
+  config.vm.network :forwarded_port, guest: 80, host: 8080
+
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+  end
   
   config.vm.provision :chef_solo do |chef|
     chef.add_recipe 'apt'
     chef.add_recipe 'build-essential'
+    chef.add_recipe 'git'
     chef.add_recipe 'python'
     chef.add_recipe 'django-native-deps'
     chef.add_recipe 'postgresql::server'
@@ -54,7 +58,10 @@ Vagrant::Config.run do |config|
           version: "9.2"
       },
       app: {
-        name: 'django-example'
+        name: 'example',
+        db: {
+          name: 'django-example'
+        }
       }
     }  
   end
