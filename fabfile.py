@@ -5,8 +5,12 @@ from contextlib import contextmanager
 from fabric.operations import put
 from fabric.api import env, local, sudo, run, cd, prefix, task, settings
 
+PROJECT_NAME = 'django-example'
+
+src_dir = os.path.join(os.path.dirname(env.real_fabfile), 'src')
+env.lcwd = os.path.join(src_dir, PROJECT_NAME)
+
 env.id_rsa_pub_file = '~/.ssh/id_rsa.pub'
-env.lcwd = 'src'
 
 env.git_bare_dir = '/apps/example.git'
 env.root_dir = '/apps/example'
@@ -108,14 +112,24 @@ def push():
 
         result = local("git push %s %s" % (env.remote, env.branch))
 
-        if not result.succeeded:
-            with cd(env.git_bare_dir):
-                run("git init --bare")
-                local("git push %s %s" % (env.remote, env.branch))
+        with settings(warn_only=False):
+            if not result.succeeded:
+                with cd(env.git_bare_dir):
+                    run("git init --bare")
+                    local("git push %s %s" % (env.remote, env.branch))
 
-            with cd(env.root_dir):
-                run("git init")
-                run("git remote add origin %s" % env.git_bare_dir)
+                with cd(env.root_dir):
+                    run("git init")
+                    run("git remote add origin %s" % env.git_bare_dir)
 
     with cd(env.root_dir):
         run("git pull origin master")
+
+
+@task
+def runserver():
+    _set_env_for_user()
+
+    with cd(env.django_dir):
+        with _virtualenv():
+            _manage_py('runserver 8080')
