@@ -1,31 +1,62 @@
+apps_dir = "/apps"
+code_dir = apps_dir + "/#{node.app.name}"
+bare_dir = apps_dir + "/#{node.app.name}.git"
+app_user = 'vagrant'
+
 nginx_site 'default' do
   enable false
 end
 
-directory "/apps" do
-  owner 'vagrant'
-  group 'vagrant'
+directory apps_dir do
+  owner app_user
+  group app_user
 end
 
-directory "/apps/#{node.app.name}.git" do
-  owner 'vagrant'
-  group 'vagrant'
+directory code_dir do
+  owner app_user
+  group app_user
 end
 
-directory "/apps/#{node.app.name}" do
-  owner 'vagrant'
-  group 'vagrant'
+directory bare_dir do
+  owner app_user
+  group app_user
 end
 
-directory "/apps/#{node.app.name}/logs" do
-  owner 'vagrant'
-  group 'vagrant'
+execute "create bare repository" do
+  cwd bare_dir
+  user app_user
+  group app_user
+  
+  command <<-EOF
+    git init --bare
+  EOF
+  
+  not_if do
+    ::File.exists?(bare_dir + "/HEAD")
+  end
 end
 
-python_virtualenv "/apps/#{node.app.name}/env" do
-  action :create
-  owner 'vagrant'
-  group 'vagrant'
+execute "create code repository" do
+    cwd code_dir
+    user app_user
+    group app_user
+
+    command <<-EOF
+      git init
+      git remote add origin /apps/#{node.app.name}.git
+    EOF
+
+    not_if "cd #{code_dir} && git status"  # check if code repository exists
+end
+
+directory code_dir + "/logs" do
+  owner app_user
+  group app_user
+end
+
+python_virtualenv code_dir + "/env" do
+  owner app_user
+  group app_user
 end
 
 template "#{node.nginx.dir}/sites-available/#{node.app.name}" do

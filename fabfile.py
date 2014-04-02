@@ -123,17 +123,8 @@ def push():
             local('git remote add %s ssh://%s@%s:%s%s' %
                 (env.remote, env.user, env.host, env.port, env.git_bare_dir))
 
-        result = local("git push %s %s" % (env.remote, env.branch))
-
-        with settings(warn_only=False):
-            if not result.succeeded:
-                with cd(env.git_bare_dir):
-                    run("git init --bare")
-                    local("git push %s %s" % (env.remote, env.branch))
-
-                with cd(env.root_dir):
-                    run("git init")
-                    run("git remote add origin %s" % env.git_bare_dir)
+        
+    local("git push %s %s" % (env.remote, env.branch))
 
     with cd(env.root_dir):
         run("git pull origin master")
