@@ -3,18 +3,15 @@
 # vi: set ft=ruby :
 #^syntax detection
 
-Vagrant.configure("2") do |config|
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
 
-  # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "debian7"
-  config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/debian-70rc1-x64-vbox4210.box"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.define "django-vm"
+  config.vm.box = "debian7.4"
+  config.vm.box_url = "https://vagrantcloud.com/ffuenf/debian-7.3.0-amd64/version/1/provider/vmware_desktop.box"
 
   config.vm.network :forwarded_port, guest: 80, host: 8080
-
-  config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
-  end
   
   config.vm.provision :chef_solo do |chef|
     chef.add_recipe 'apt'
