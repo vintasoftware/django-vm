@@ -83,26 +83,12 @@ def deps():
 
 
 @task
-def setup():
+def createsuperuser():
     _set_env_for_user()
 
     with cd(env.django_dir):
         with _virtualenv():
-            _manage_py('syncdb --noinput')
-            _manage_py('migrate')
-            _manage_py('collectstatic --noinput')
             _manage_py('createsuperuser')
-
-
-@task
-def migrate():
-    _set_env_for_user()
-
-    with cd(env.django_dir):
-        with _virtualenv():
-            _manage_py('syncdb --noinput')
-            _manage_py('migrate')
-            _manage_py('collectstatic --noinput')
 
 
 @task
@@ -128,12 +114,3 @@ def push():
 
     with cd(env.root_dir):
         run("git pull origin master")
-
-
-@task
-def runserver():
-    _set_env_for_user()
-
-    with cd(env.django_dir):
-        with _virtualenv():
-            _manage_py('runserver 8080')

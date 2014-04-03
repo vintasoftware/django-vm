@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cd /apps/<%= node['app']['name'] %>
+unset GIT_DIR
+git pull origin master -u
+sh post-receive.sh

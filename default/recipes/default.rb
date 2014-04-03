@@ -1,6 +1,6 @@
 apps_dir = "/apps"
-code_dir = apps_dir + "/#{node.app.name}"
-bare_dir = apps_dir + "/#{node.app.name}.git"
+code_dir = "#{apps_dir}/#{node.app.name}"
+bare_dir = "#{code_dir}.git"
 app_user = 'vagrant'
 
 nginx_site 'default' do
@@ -32,7 +32,7 @@ execute "create bare repository" do
   EOF
   
   not_if do
-    ::File.exists?(bare_dir + "/HEAD")
+    ::File.exists?("#{bare_dir}/HEAD")
   end
 end
 
@@ -49,14 +49,21 @@ execute "create code repository" do
     not_if "cd #{code_dir} && git status"  # check if code repository exists
 end
 
-directory code_dir + "/logs" do
+directory "#{code_dir}/logs" do
   owner app_user
   group app_user
 end
 
-python_virtualenv code_dir + "/env" do
+python_virtualenv "#{code_dir}/env" do
   owner app_user
   group app_user
+end
+
+template "#{bare_dir}/hooks/post-receive" do
+  source "post-receive.erb"
+  owner app_user
+  group app_user
+  mode 0755
 end
 
 template "#{node.nginx.dir}/sites-available/#{node.app.name}" do
