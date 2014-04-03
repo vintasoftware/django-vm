@@ -1,8 +1,6 @@
 import os
-from tempfile import mkdtemp
 from contextlib import contextmanager
 
-from fabric.operations import put
 from fabric.api import env, local, sudo, run, cd, prefix, task, settings
 
 APP_NAME = 'django-example'
@@ -18,7 +16,7 @@ env.django_dir = '%s/%s' % (env.root_dir, APP_NAME)
 env.media_dir = '%s/media' % env.django_dir
 env.static_dir = '%s/static' % env.django_dir
 env.requirements_file = '%s/requirements/staging.txt' % env.root_dir
-env.settings_file = 'core.settings.staging'
+env.settings_name = 'core.settings.staging'
 env.virtualenv = '%s/env' % env.root_dir
 env.activate = 'source %s/bin/activate ' % env.virtualenv
 
@@ -33,7 +31,7 @@ def _virtualenv():
 
 
 def _manage_py(command):
-    run('python manage.py %s --settings=%s' % (command, env.settings_file))
+    run('python manage.py %s --settings=%s' % (command, env.settings_name))
 
 
 def _parse_ssh_config(text):
@@ -66,23 +64,6 @@ def _set_env_for_user():
 
 
 @task
-def clean():
-    _set_env_for_user()
-
-    with cd(env.root_dir):
-        run('find . -name "*.pyc" -delete')
-
-
-@task
-def deps():
-    _set_env_for_user()
-
-    with cd(env.root_dir):
-        with _virtualenv():
-            run('pip install -r %s' % env.requirements_file)
-
-
-@task
 def createsuperuser():
     _set_env_for_user()
 
@@ -111,6 +92,3 @@ def push():
 
         
     local("git push %s %s" % (env.remote, env.branch))
-
-    with cd(env.root_dir):
-        run("git pull origin master")

@@ -3,5 +3,5 @@
 ## First run
 ```
 vagrant up
-fab authorize_key push deps setup runserver
+fab authorize_key push
 ```
